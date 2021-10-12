@@ -66,10 +66,10 @@ class Target:
         pass
 
     def move(self):
-        if (self.x + self.r >= field_width) or (self.x - self.r <= 0):
+        if (self.x + self.r + self.dx >= field_width) or (self.x - self.r + self.dx <= 0):
             self.dx = -self.dx * speed_modification()
             self.dy = self.dy * speed_modification()
-        if (self.y + self.r >= field_height) or (self.y - self.r <= 0):
+        if (self.y + self.r + self.dy >= field_height) or (self.y - self.r + self.dy <= 0):
             self.dx = self.dx * speed_modification()
             self.dy = -self.dy * speed_modification()
         self.x += self.dx
@@ -81,6 +81,10 @@ class Target:
 
 
 class Ball(Target):
+    def __init__(self, screen):
+        Target.__init__(self, screen)
+        self.score_rate = 1
+
     def paint(self):
         circle(screen, self.color, (self.x, self.y), self.r)
 
@@ -89,6 +93,10 @@ class Ball(Target):
 
 
 class Square(Target):
+    def __init__(self, screen):
+        Target.__init__(self, screen)
+        self.score_rate = 10
+
     def paint(self):
         rect(screen, self.color, [(self.x - self.r, self.y - self.r), (2 * self.r, 2 * self.r)])
 
@@ -102,7 +110,7 @@ finished = False
 
 # Balls initialization
 targets = []
-ball_number = 5
+ball_number = 50
 for i in range(ball_number):
     tar = Ball(screen)
     targets.append(tar)
